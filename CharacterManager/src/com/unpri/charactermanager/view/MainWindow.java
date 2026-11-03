@@ -1,91 +1,73 @@
-
-
-
 package com.unpri.charactermanager.view;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.BoxLayout;
-import javax.swing.BorderFactory;
-import java.awt.Font;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import com.unpri.charactermanager.model.Character;
 
 public class MainWindow extends JFrame {
 
-    private JPanel mainPanel;
-    private ArrayList<Character> characterList;
-    private double averageLevel;
+    private JPanel mainPanel;                      // container utama
+    private ArrayList<Character> characterList;    // data dari Main.java (Model)
 
-    public MainWindow(
-            ArrayList<Character> characterList,
-            double averageLevel) {
-
-        super("Character Manager v0.3");
-
+    public MainWindow(ArrayList<Character> characterList) {
+        super("Character Manager v0.4");           // versi naik: sprint #4
         this.characterList = characterList;
-        this.averageLevel = averageLevel;
 
-        initComponents();
+        initComponents();                          // 1. susun semua komponen dulu
 
-        setSize(500, 450);
+        pack();                                    // 2. ukuran jendela mengikuti isi
+        setMinimumSize(new Dimension(420, 300));   // 3. cegah jendela terlalu kecil
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null);               // 4. pusatkan SETELAH pack()
     }
 
     private void initComponents() {
-        mainPanel = new JPanel();
+        // GridLayout(0, 1, 0, 8): berapa pun baris, 1 kolom, jarak vertikal 8 px.
+        // (Layout dibahas penuh di Pertemuan 5; di sini dipakai agar kartu tersusun rapi.)
+        mainPanel = new JPanel(new GridLayout(0, 1, 0, 8));
+        mainPanel.setBackground(AppTheme.BG_MAIN);                           // warna latar panel
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16)); // padding luar
 
-        mainPanel.setLayout(
-            new BoxLayout(mainPanel, BoxLayout.Y_AXIS)
-        );
+        mainPanel.add(createTitleLabel());          // judul di atas
 
-        mainPanel.setBorder(
-            BorderFactory.createEmptyBorder(15, 15, 15, 15)
-        );
-
-        // Judul daftar karakter
-        JLabel titleLabel = new JLabel(
-            "=== Daftar Karakter (" + characterList.size() + ") ==="
-        );
-
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        mainPanel.add(titleLabel);
-
-        // Tampilkan setiap karakter
-        for (Character c : characterList) {
-
-            String info = c.getName() + " | " + c.getType()
-                    + " | Lv." + c.getLevel()
-                    + " | HP:" + c.getHitPoints()
-                    + " | ATK:" + c.getAttackPower();
-
-            JLabel characterLabel = new JLabel(info);
-
-            mainPanel.add(characterLabel);
+        for (Character c : characterList) {          // satu kartu per karakter
+            mainPanel.add(createCharacterLabel(c));
         }
 
-        // JLabel statistik di bagian bawah daftar
-        JLabel averageLabel = new JLabel(
-            String.format(
-                java.util.Locale.US,
-                "Rata-rata Level: %.1f",
-                averageLevel
-            )
-        );
+        add(mainPanel);                             // pasang panel ke JFrame
+    }
 
-        averageLabel.setFont(new Font("Arial", Font.BOLD, 14));
+    /** Membuat judul layar. */
+    private JLabel createTitleLabel() {
+        JLabel lbl = new JLabel("Daftar Karakter (" + characterList.size() + ")",
+                                SwingConstants.CENTER);   // teks di tengah label
+        lbl.setFont(AppTheme.FONT_TITLE);                 // font judul dari tema
+        lbl.setForeground(AppTheme.TEXT_MAIN);            // warna teks judul
+        return lbl;
+    }
 
-        // Beri jarak sebelum statistik
-        mainPanel.add(
-            javax.swing.Box.createVerticalStrut(15)
-        );
+    /** Membuat satu kartu karakter (JLabel berwarna sesuai role). */
+    private JLabel createCharacterLabel(Character c) {
+        String info = c.getName() + " | " + c.getType()
+                    + " | Lv." + c.getLevel()
+                    + " | HP:" + c.getHitPoints()
+                    + " | ATK:" + c.getAttackPower();     // hanya MEMBACA lewat getter
 
-        mainPanel.add(averageLabel);
-
-        add(mainPanel);
+        JLabel lbl = new JLabel(info);
+        lbl.setFont(AppTheme.FONT_BODY);                          // font isi
+        lbl.setForeground(AppTheme.TEXT_LIGHT);                   // teks putih
+        lbl.setBackground(AppTheme.colorFor(c.getType()));        // warna dari role
+        lbl.setOpaque(true);                                      // WAJIB agar background tampak
+        lbl.setBorder(AppTheme.CARD_BORDER);                      // padding kartu
+        lbl.setToolTipText(AppTheme.describe(c.getType()));       // bantuan saat hover
+        lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // kursor tangan
+        return lbl;
     }
 }
-
-
