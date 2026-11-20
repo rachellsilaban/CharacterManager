@@ -1,10 +1,8 @@
-
-import com.unpri.charactermanager.model.Character;
-import com.unpri.charactermanager.model.CharacterType;
+import com.unpri.charactermanager.model.Character;     
+import com.unpri.charactermanager.model.CharacterType; 
 
 public class Main {
-
-    public static void main(String[] args) {
+public static void main(String[] args) {              // method main: titik awal eksekusi program
 
         System.out.println("=== Character Manager v0.1 ===");
 
@@ -20,45 +18,40 @@ public class Main {
 
         System.out.println();
         System.out.println(">> " + hero.getName() + " level up!");
-
-        hero.setLevel(hero.getLevel() + 1);
-
-        // HP dan Attack dihitung ulang otomatis
+        hero.setLevel(hero.getLevel() + 1);     // naik 1 level, HP & Attack dihitung ulang otomatis
         System.out.println("After level up: " + hero);
 
         System.out.println();
         System.out.println(">> Nama karakter: " + hero.getName());
         System.out.println(">> Jenis karakter: " + hero.getType());
         System.out.println(">> HP saat ini: " + hero.getHitPoints());
+    
+        System.out.println();
+        System.out.println("=== Demo Mini-Challenge ===");
 
+        // Membuat karakter baru
+        Character newCharacter = new Character(
+            "Gandalf", CharacterType.MAGE, 7
+        );
 
-        // =====================================
-        // MINI-CHALLENGE TP03
-        // =====================================
+        // Mengatur mana karakter
+        newCharacter.setMana(100);
+
+        // Menampilkan informasi karakter
+        System.out.println(newCharacter);
+
+        // Mengecek apakah karakter masih hidup
+        System.out.println(
+            "Apakah " + newCharacter.getName() +
+            " masih hidup? " + newCharacter.isAlive()
+        );
 
         System.out.println();
-        System.out.println("=== MINI-CHALLENGE TP03 ===");
-
-        // Membuat satu karakter baru
-        Character newHero = new Character(
-            "Rachel",
-            CharacterType.MAGE,
-            5
-        );
-
-        // Mengatur nilai mana
-        newHero.setMana(80);
-
-        // Menampilkan nilai mana menggunakan getter
-        System.out.println(">> Mana karakter: " + newHero.getMana());
-
-        // Menampilkan informasi lengkap karakter
-        System.out.println(newHero);
-
-        // Menguji method isAlive()
-        System.out.println(
-            ">> Apakah karakter masih hidup? " + newHero.isAlive()
-        );
-
+        System.out.println("=== Demo Validasi Mana ===");
+            try {
+                newCharacter.setMana(-10);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Validasi berhasil: " + e.getMessage());
+            }
     }
 }
