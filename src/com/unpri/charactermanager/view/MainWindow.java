@@ -20,7 +20,6 @@ import com.unpri.charactermanager.model.CharacterType;
 
 public class MainWindow extends JFrame {
 
-    // Konstanta versi aplikasi
     private static final String APP_VERSION = "v0.5";
 
     private ArrayList<Character> characterList;
@@ -42,13 +41,22 @@ public class MainWindow extends JFrame {
         getContentPane().setBackground(AppTheme.BG_MAIN);
         setLayout(new BorderLayout());
 
-        add(createHeaderPanel(), BorderLayout.NORTH);
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(
+            new BoxLayout(topPanel, BoxLayout.Y_AXIS)
+        );
+        topPanel.setBackground(AppTheme.BG_MAIN);
+
+        topPanel.add(createHeaderPanel());
+        topPanel.add(createStatisticsPanel());
+
+        add(topPanel, BorderLayout.NORTH);
         add(createListArea(), BorderLayout.CENTER);
         add(createLegendPanel(), BorderLayout.EAST);
         add(createStatusPanel(), BorderLayout.SOUTH);
     }
 
-    /** NORTH: judul di kiri, jumlah karakter di kanan. */
+
     private JPanel createHeaderPanel() {
         JPanel header = new JPanel(new BorderLayout());
 
@@ -73,7 +81,42 @@ public class MainWindow extends JFrame {
         return header;
     }
 
-    /** CENTER: kartu karakter di dalam JScrollPane. */
+    private JPanel createStatisticsPanel() {
+        JPanel statistics = new JPanel(
+            new GridLayout(2, 2, 8, 8)
+        );
+
+        statistics.setBackground(AppTheme.BG_MAIN);
+        statistics.setBorder(
+            BorderFactory.createEmptyBorder(4, 16, 8, 16)
+        );
+
+        for (CharacterType type : CharacterType.values()) {
+            int total = 0;
+
+            for (Character c : characterList) {
+                if (c.getType() == type) {
+                    total++;
+                }
+            }
+
+            JLabel item = new JLabel(
+                type.name() + " : " + total + " karakter"
+            );
+
+            item.setFont(AppTheme.FONT_MONO);
+            item.setForeground(AppTheme.TEXT_LIGHT);
+            item.setBackground(AppTheme.colorFor(type));
+            item.setOpaque(true);
+            item.setBorder(AppTheme.CARD_BORDER);
+
+            statistics.add(item);
+        }
+
+        return statistics;
+    }
+
+
     private JScrollPane createListArea() {
         JPanel cards = new JPanel(
             new GridLayout(0, 1, 0, 8)
@@ -103,7 +146,6 @@ public class MainWindow extends JFrame {
         return scroll;
     }
 
-    /** Satu kartu karakter. */
     private JLabel createCharacterLabel(Character c) {
         String info = c.getName()
                 + " | " + c.getType()
@@ -126,7 +168,6 @@ public class MainWindow extends JFrame {
         return lbl;
     }
 
-    /** EAST: legenda warna per role. */
     private JPanel createLegendPanel() {
         JPanel legend = new JPanel();
 
@@ -168,7 +209,6 @@ public class MainWindow extends JFrame {
         return legend;
     }
 
-    /** SOUTH: status di kiri dan versi aplikasi di kanan. */
     private JPanel createStatusPanel() {
         JPanel status = new JPanel(new BorderLayout(16, 0));
 
