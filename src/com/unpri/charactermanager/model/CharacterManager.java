@@ -80,7 +80,6 @@ public class CharacterManager {
     }
 
     
-    // Menghitung rata-rata level semua karakter
     public double getAverageLevel() {
         if (characterList.isEmpty()) {
             return 0.0;
