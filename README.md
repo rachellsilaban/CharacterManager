@@ -1,56 +1,44 @@
-# Character Manager — TP05 TUGAS
+## TP8 — MainWindow, Data Dinamis & Analisis MVC
 
-## Deskripsi Project
+### 1. Screenshot Output
 
-Character Manager adalah program berbasis Java yang digunakan untuk mengelola data karakter. Program ini menerapkan konsep pemrograman berorientasi objek (Object-Oriented Programming) dan menyediakan fitur untuk menambahkan, mencari, menghapus, serta menganalisis karakter.
+#### Sebelum Perubahan Data
 
-## Fitur Program
+Menampilkan tiga karakter awal, yaitu Arjuna, Merlin, dan Athena, beserta statistik rata-rata level.
 
-### Bagian A — CRUD dan Encapsulation
-- `addCharacter()` digunakan untuk menambahkan karakter baru dan menolak nama karakter yang duplikat.
-- `findByName()` digunakan untuk mencari karakter berdasarkan nama.
-- `removeCharacter()` digunakan untuk menghapus karakter berdasarkan nama.
-- `getTotalCharacters()` digunakan untuk menghitung jumlah karakter.
-- `getAllCharacters()` mengembalikan salinan ArrayList agar perubahan pada daftar salinan tidak mengubah struktur daftar asli.
-- `equals()` membandingkan karakter berdasarkan nama.
+![Output sebelum perubahan](screenshots/tp08-sebelum.png)
 
-### Bagian B — Mini-Challenge
-- `getAverageLevel()` menghitung rata-rata level seluruh karakter dan mengembalikan `0.0` jika daftar kosong.
-- `findByType(CharacterType type)` mencari semua karakter berdasarkan tipe, seperti WARRIOR, MAGE, ARCHER, atau HEALER.
+#### Sesudah Perubahan Data
 
-### Bagian C — Fitur Analitik
-#### Method `findStrongest()`
-Method `findStrongest()` digunakan untuk menemukan karakter dengan nilai `attackPower` tertinggi.
-**Rasional Pemilihan Fitur**
-Fitur ini dipilih karena membantu pengguna mengetahui karakter dengan daya serang tertinggi secara otomatis tanpa harus membandingkan data karakter satu per satu. Fitur ini juga dapat dikembangkan untuk membantu analisis kekuatan karakter dalam permainan.
-**Cara Kerja**
-Method memeriksa daftar karakter. Karakter pertama digunakan sebagai nilai awal, kemudian setiap karakter dibandingkan berdasarkan `attackPower`. Jika ditemukan karakter dengan daya serang lebih tinggi, karakter tersebut menjadi kandidat terkuat.
-Jika daftar karakter kosong, method mengembalikan `null`.
-**Encapsulation**
-Method tidak mengembalikan ArrayList internal milik CharacterManager. Method hanya mengembalikan satu objek Character yang memiliki nilai attack power tertinggi. Perlu diperhatikan bahwa salinan yang dikembalikan merupakan
-shallow copy. Artinya, struktur ArrayList terpisah, tetapi
-objek Character di dalamnya masih menggunakan referensi yang sama.
-**Javadoc**
-Method dilengkapi dokumentasi Javadoc yang menjelaskan tujuan method dan nilai yang dikembalikan.
-**Hasil Pengujian**
-Berdasarkan pengujian program, Arjuna menjadi karakter dengan attack power tertinggi, yaitu 505, setelah levelnya diubah menjadi 99 pada eksperimen reference.
+Menampilkan lima karakter setelah penambahan Leonidas dan Freya. Statistik rata-rata level ikut berubah menjadi 5.2.
 
-## Screenshot Output
-![Output Character Manager](screenshots/tp05.png)
+![Output sesudah perubahan](screenshots/tp08-sesudah.png)
 
-## Kesimpulan
+### 2. Aliran Data dan Penerapan MVC
 
-Program Character Manager menerapkan pengelolaan data karakter, pencarian berdasarkan nama dan tipe, perhitungan rata-rata level, serta analisis karakter dengan daya serang tertinggi. Pengujian dilakukan melalui Main.java untuk memeriksa hasil setiap fitur.
+Pada aplikasi Character Manager, `Main.java` berperan sebagai bagian yang mengatur jalannya program. Pertama, Main membuat objek `CharacterManager` dan menambahkan data karakter ke dalamnya. Selanjutnya, `CharacterManager` sebagai bagian dari Model bertanggung jawab mengelola data karakter, menyediakan daftar karakter melalui method `getAllCharacters()`, serta menghitung rata-rata level menggunakan method `getAverageLevel()`.
 
-## Pengembangan Project
+Setelah data dan statistik diperoleh, Main mengirimkannya ke `MainWindow` sebagai View. `MainWindow` bertugas menampilkan daftar karakter secara dinamis menggunakan perulangan `for-each` dan menampilkan nilai rata-rata level melalui JLabel. Dengan pemisahan tersebut, pengelolaan data berada di Model, sedangkan tampilan antarmuka berada di View. Selain itu, `SwingUtilities.invokeLater()` digunakan agar pembuatan dan pengoperasian GUI dijalankan melalui Event Dispatch Thread (EDT).
 
-Project ini merupakan pengembangan dari Character Manager
-yang sebelumnya dibuat pada TP03. Pada TP05, program
-dikembangkan dengan fitur pengelolaan karakter, analisis
-rata-rata level, pencarian berdasarkan tipe, dan pencarian
-karakter dengan attack power tertinggi.
+### 3. Karakter Tambahan
 
-## Struktur Folder Project
+Pada TP8, dua karakter baru ditambahkan sehingga jumlah keseluruhan karakter menjadi lima.
+
+| Karakter |  Tipe  | Level |                                  Alasan Pemilihan                                                |
+| -------- | ------ | ----- | -------------------------------------------------------------------------------------------------|
+| Leonidas | MAGE   |   8   | Memberikan variasi level yang lebih tinggi sehingga dapat menunjukkan perubahan nilai rata-rata. |
+| Freya    | ARCHER |   6   | Menambah variasi tipe karakter dan memberikan nilai level yang berbeda dari karakter lainnya.    |
+
+Karakter Arjuna, Merlin, dan Athena tetap dipertahankan sebagai data awal. Penambahan Leonidas dan Freya dilakukan untuk menguji kemampuan aplikasi dalam menampilkan data secara dinamis serta menghitung ulang statistik berdasarkan jumlah dan level karakter yang tersedia.
+
+**Perhitungan rata-rata level:**
+
+(5 + 3 + 4 + 8 + 6) / 5 = 5.2
+
+Dengan demikian, aplikasi menampilkan statistik **Rata-rata Level: 5.2**.
+
+### 4. Struktur Folder Project
+
 ```text
 CharacterManager-Java/
 ├── src/
@@ -58,18 +46,23 @@ CharacterManager-Java/
 │   └── com/
 │       └── unpri/
 │           └── charactermanager/
-│               └── model/
-│                   ├── Character.java
-│                   ├── CharacterManager.java
-│                   └── CharacterType.java
+│               ├── model/
+│               │   ├── Character.java
+│               │   ├── CharacterManager.java
+│               │   └── CharacterType.java
+│               └── view/
+│                   └── MainWindow.java
 ├── screenshots/
 │   ├── tp03.png
-│   └── tp05.png
+│   ├── tp05.png
+│   ├── tp08-sebelum.png
+│   └── tp08-sesudah.png
 └── README.md
 ```
 
-## Identitas Mahasiswa
-- Nama Lengkap: Rachel Clarita Oktaviana Br Silaban
-- NIM: 253303621203
-- Kelas: Sistem Informasi 3 Pagi A
-- Google Docs: [https://1drv.ms/w/c/8cf06abcf94f4402/IQCY7l_FgyHgQ6_phm0uvGRnAVWm9RYWzI8xJN9GvK-tmfU?e=Pgdya2]
+### 5. Identitas Mahasiswa
+
+- **Nama Lengkap:** Rachel Clarita Oktaviana Br Silaban
+- **NIM:** 253303621203
+- **Kelas:** Sistem Informasi 3 Pagi A
+- **Dokumen Analisis GUI dan MVC:** [Buka Dokumen Analisis](https://1drv.ms/w/c/8cf06abcf94f4402/IQC-q9Mp5yK9Tqinx680e9znAUFLsQiJQNq4irlAKeo1qj4?e=aAcQvi)
