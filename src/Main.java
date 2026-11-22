@@ -34,15 +34,10 @@ public class Main {
 
         // 2. Ambil data dan hitung statistik
         ArrayList<Character> characters = manager.getAllCharacters();
-        double averageLevel = manager.getAverageLevel();
 
         // 3. Tampilkan jendela aplikasi
         SwingUtilities.invokeLater(() -> {
-            MainWindow window = new MainWindow(
-                characters,
-                averageLevel
-            );
-
+            MainWindow window = new MainWindow(characters);
             window.setVisible(true);
         });
     }
