@@ -32,6 +32,9 @@ public class Main {
             new Character("Freya", CharacterType.ARCHER, 6)
         );
 
+        manager.addCharacter(new Character("Gatotkaca", CharacterType.WARRIOR, 7)); // level tinggi
+        manager.addCharacter(new Character("Morgana", CharacterType.MAGE, 1));      // level rendah
+
         // 2. Ambil data dan hitung statistik
         ArrayList<Character> characters = manager.getAllCharacters();
 
