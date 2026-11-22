@@ -16,18 +16,28 @@ public class CharacterManager {
 
     /**
      * Menambahkan karakter baru ke dalam list.
-     * Menolak jika sudah ada karakter dengan nama yang sama (cek via equals()).
+     * Menolak jika sudah ada karakter dengan nama yang sama.
      * @return true jika berhasil ditambahkan, false jika ditolak karena duplikat
      */
+    
     public boolean addCharacter(Character character) {
-        if (findByName(character.getName()) != null) {   // cek dulu apakah nama sudah ada
-            System.out.println("❌ Gagal: karakter dengan nama '" + character.getName() + "' sudah ada!");
+        if (character == null) {
+            System.out.println("Gagal: karakter tidak boleh null.");
             return false;
         }
+
+        if (findByName(character.getName()) != null) {
+            System.out.println("Gagal: karakter dengan nama '"
+                    + character.getName() + "' sudah ada!");
+            return false;
+        }
+
         characterList.add(character);
-        System.out.println("✅ Karakter '" + character.getName() + "' berhasil ditambahkan.");
+        System.out.println("Karakter '" + character.getName()
+                + "' berhasil ditambahkan.");
         return true;
     }
+
 
     /**
      * Mencari karakter berdasarkan nama.
@@ -69,13 +79,11 @@ public class CharacterManager {
         return new ArrayList<>(characterList);        // defensive copy — lihat Halaman 7 untuk eksperimen
     }
 
-    /**
-     * Menghitung rata-rata level seluruh karakter.
-     * Mengembalikan 0 jika list kosong.
-     */
+    
+    // Menghitung rata-rata level semua karakter
     public double getAverageLevel() {
         if (characterList.isEmpty()) {
-            return 0;
+            return 0.0;
         }
 
         int totalLevel = 0;
@@ -87,9 +95,7 @@ public class CharacterManager {
         return (double) totalLevel / characterList.size();
     }
 
-    /**
-     * Mencari semua karakter berdasarkan tipe tertentu.
-     */
+    // Mencari semua karakter berdasarkan tipe
     public ArrayList<Character> findByType(CharacterType type) {
         ArrayList<Character> result = new ArrayList<>();
 
@@ -100,6 +106,28 @@ public class CharacterManager {
         }
 
         return result;
+    }
+
+    /**
+     * Mencari karakter dengan attack power tertinggi.
+     *
+     * @return karakter dengan attack power tertinggi,
+     *         atau null jika tidak ada karakter.
+     */
+    public Character findStrongest() {
+        if (characterList.isEmpty()) {
+            return null;
+        }
+
+        Character strongest = characterList.get(0);
+
+        for (Character c : characterList) {
+            if (c.getAttackPower() > strongest.getAttackPower()) {
+                strongest = c;
+            }
+        }
+
+        return strongest;
     }
 
 

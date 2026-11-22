@@ -59,24 +59,78 @@ public class Main {
         System.out.println("Total di manager asli: " + manager.getTotalCharacters());
         System.out.println("Total di salinan list : " + salinanList.size());
 
+        // Menghapus elemen dari salinan list
+        salinanList.removeIf(c -> c.getName().equals("Merlin"));
 
-        // ===== MINI CHALLENGE: Analytics =====
-        System.out.println("\n--- Mini Challenge: Analytics ---");
+        System.out.println("Total manager setelah hapus dari salinan: "
+                + manager.getTotalCharacters());
 
-        // 1. Menghitung rata-rata level karakter
-        System.out.println("Rata-rata level karakter: " + manager.getAverageLevel());
-        // 2. Mencari karakter berdasarkan tipe WARRIOR
-        System.out.println("\nKarakter dengan tipe WARRIOR:");
-        for (Character c : manager.findByType(CharacterType.WARRIOR)) {
-            System.out.println(c);
-        }
-        // 3. Mencari karakter berdasarkan tipe MAGE
-        System.out.println("\nKarakter dengan tipe MAGE:");
-        for (Character c : manager.findByType(CharacterType.MAGE)) {
-            System.out.println(c);
-        }
+        System.out.println("Total salinan setelah hapus Merlin: "
+                + salinanList.size());
 
         CharacterManager managerKosong = new CharacterManager();
-        System.out.println("Rata-rata list kosong: " + managerKosong.getAverageLevel());
-    }  
+        System.out.println(
+            "Rata-rata level list kosong: "
+            + managerKosong.getAverageLevel()
+        );
+
+        // ==========================
+        // BAGIAN B - MINI CHALLENGE
+        // ==========================
+
+            System.out.println("\n=== Mini-Challenge Part B ===");
+
+            // Pengujian 1: Rata-rata level
+            double rataRata = manager.getAverageLevel();
+            System.out.println("Rata-rata level karakter: " + rataRata);
+
+            // Pengujian 2: Pencarian berdasarkan tipe
+            System.out.println("\nKarakter bertipe WARRIOR:");
+
+            java.util.ArrayList<Character> warriors =
+                    manager.findByType(CharacterType.WARRIOR);
+
+            if (warriors.isEmpty()) {
+                System.out.println("Tidak ada karakter bertipe WARRIOR.");
+            } else {
+                for (Character c : warriors) {
+                    System.out.println(c);
+                }
+            }
+
+            // Pengujian tambahan: tipe yang tidak tersedia
+            System.out.println("\nKarakter bertipe HEALER:");
+
+            java.util.ArrayList<Character> healers =
+                    manager.findByType(CharacterType.HEALER);
+
+            if (healers.isEmpty()) {
+                System.out.println("Tidak ada karakter bertipe HEALER.");
+            } else {
+                for (Character c : healers) {
+                    System.out.println(c);
+                }
+            }
+    
+    
+        // ==========================
+        // BAGIAN C - FITUR ANALITIK
+        // ==========================
+
+        System.out.println("\n=== Mini-Challenge Part C ===");
+
+        Character strongest = manager.findStrongest();
+
+        if (strongest != null) {
+            System.out.println("Karakter dengan attack power tertinggi:");
+            System.out.println(strongest);
+            System.out.println("Attack Power: " + strongest.getAttackPower());
+        } else {
+            System.out.println("Belum ada karakter yang terdaftar.");
+        }
+
+
+    }
+    
+    
 }

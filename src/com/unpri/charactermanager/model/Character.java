@@ -1,4 +1,5 @@
 package com.unpri.charactermanager.model;
+import java.util.Objects;
 
 public class Character {
     // ===== ATRIBUT (private — tidak bisa diakses langsung dari luar class) =====
@@ -66,7 +67,7 @@ public class Character {
     public void setMana(int mana) {
         if (mana < 0) {
             throw new IllegalArgumentException("Mana tidak boleh negatif");
-        }
+    }
         this.mana = mana;
     }
 
@@ -93,7 +94,10 @@ public class Character {
         if (this == obj) return true;                    // optimasi: jika memang object yang sama persis
         if (!(obj instanceof Character)) return false;    // jika bukan Character, pasti tidak sama
         Character other = (Character) obj;                // casting aman karena sudah dicek instanceof
-        return this.name.equals(other.name);               // bandingkan isi atribut name (String punya equals sendiri)
+        return Objects.equals(this.name, other.name);               // bandingkan isi atribut name (String punya equals sendiri)
     }
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
 } 
