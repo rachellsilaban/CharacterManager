@@ -24,6 +24,13 @@ public class Character {
             throw new IllegalArgumentException("Level harus 1-99");
         }
 
+        // Validasi khusus MAGE
+        if (type == CharacterType.MAGE && level > 60) {
+            throw new IllegalArgumentException(
+                "MAGE hanya boleh memiliki level maksimal 60"
+            );
+        }
+
         this.name = name;
         this.type = type;
         this.level = level;
