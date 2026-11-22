@@ -94,6 +94,7 @@ public class CharacterFormPanel extends JPanel {
             levelSpinner.commitEdit();                         // pastikan teks yang diketik sudah dikomit
         } catch (ParseException ex) {
             showError("Level harus berupa angka", levelSpinner);
+            levelSpinner.requestFocusInWindow();
             return;
         }
 
@@ -101,9 +102,15 @@ public class CharacterFormPanel extends JPanel {
         int level = (Integer) levelSpinner.getValue();                  // cast Object -> Integer
 
         try {
-            manager.addCharacter(new Character(name, role, level));     // Model menjaga aturannya sendiri
+            Character newCharacter = new Character(name, role, level);
+            if (!manager.addCharacter(newCharacter)) {
+                showError("Nama sudah dipakai", nameField);
+                nameField.requestFocusInWindow();
+                return;
+            }
         } catch (IllegalArgumentException ex) {
-            showError(ex.getMessage(), levelSpinner);          // tampilkan pesan dari Model apa adanya
+            showError(ex.getMessage(), levelSpinner);
+            levelSpinner.requestFocusInWindow();
             return;
         }
 

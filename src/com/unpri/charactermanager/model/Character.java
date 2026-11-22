@@ -36,9 +36,27 @@ public class Character {
         this.level = level;
     }
 
-    // ===== CONSTRUCTOR 2: untuk MEMUAT karakter dari database =====
-    // Dipakai saat data sudah ada (id dan statistik sudah final dari DB)
-    public Character(int id, String name, CharacterType type, int level, int hitPoints, int attackPower) {
+    public Character(int id, String name, CharacterType type, int level,
+                    int hitPoints, int attackPower) {
+
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Nama tidak boleh kosong");
+        }
+
+        if (type == null) {
+            throw new IllegalArgumentException("Role wajib dipilih");
+        }
+
+        if (level < 1 || level > 99) {
+            throw new IllegalArgumentException("Level harus 1-99");
+        }
+
+        if (type == CharacterType.MAGE && level > 60) {
+            throw new IllegalArgumentException(
+                "MAGE hanya boleh memiliki level maksimal 60"
+            );
+        }
+
         this.id = id;
         this.name = name;
         this.type = type;
@@ -71,11 +89,18 @@ public class Character {
     }
 
     public void setLevel(int level) {
-        if (level < 1) {                       // validasi: level tidak boleh kurang dari 1
-            throw new IllegalArgumentException("Level minimal adalah 1");
+        if (level < 1 || level > 99) {
+            throw new IllegalArgumentException("Level harus 1-99");
         }
+
+        if (this.type == CharacterType.MAGE && level > 60) {
+            throw new IllegalArgumentException(
+                "MAGE hanya boleh memiliki level maksimal 60"
+            );
+        }
+
         this.level = level;
-        this.hitPoints = calculateBaseHP();      // statistik dihitung ULANG setiap level berubah
+        this.hitPoints = calculateBaseHP();
         this.attackPower = calculateBaseAttack();
     }
 

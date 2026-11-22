@@ -1,78 +1,61 @@
-## TP12 — Layout Manager dan Responsive GUI
+## TP14 — Input & Validation
 
-### 1. Wireframe Aplikasi
+### A. Implementasi Form Input dan Validasi
 
-Berikut gambaran struktur tampilan aplikasi Character Manager v0.5:
+Pada TP14, aplikasi Character Manager dikembangkan dengan menambahkan form input karakter menggunakan komponen Swing, yaitu `JTextField` untuk nama, `JComboBox` untuk role, dan `JSpinner` untuk level.
 
-```text
-+------------------------------------------------------+
-|                    HEADER (NORTH)                    |
-|  Character Manager                       8 karakter  |
-+------------------------------------------------------+
-|                  PANEL STATISTIK                     |
-|  WARRIOR: 3       | MAGE: 3                          |
-|  ARCHER: 2        | HEALER: 0                        |
-+-------------------------------------------+----------+
-|                                           |          |
-|             DAFTAR KARAKTER               | LEGENDA  |
-|                 (CENTER)                  |  (EAST)  |
-|                                           |          |
-|  Arjuna                                   | WARRIOR  |
-|  Merlin                                   | MAGE     |
-|  Athena                                   | ARCHER   |
-|  Gatotkaca                                | HEALER   |
-|  Morgana                                  |          |
-|  Artemis                                  |          |
-|  Bima                                     |          |
-|  Circe                                    |          |
-|                                           |          |
-+-------------------------------------------+----------+
-|                    STATUS (SOUTH)                    |
-|  Total: 8 karakter | Siap                       v0.5 |
-+------------------------------------------------------+
-```
+Validasi nama dilakukan secara berurutan, mulai dari kelengkapan nama, panjang karakter, format nama, hingga pemeriksaan nama duplikat. Validasi aturan karakter juga diterapkan pada Model menggunakan `IllegalArgumentException`, termasuk aturan khusus MAGE yang memiliki level maksimal 60.
 
-### 2. Screenshot Implementasi
+Pesan kesalahan ditampilkan langsung pada form dengan perubahan border menjadi merah. Jika input berhasil, form akan dikosongkan dan karakter baru langsung ditampilkan pada daftar karakter.
 
-**A. Tampilan Ukuran Awal**
+### B. Screenshot Pengujian
 
-![Tampilan ukuran awal](screenshots/tp12-initial.png)
+**1. Error Nama Kosong**
 
-**B. Tampilan Jendela Dikecilkan**
+![Error Nama Kosong](screenshots/tp14error-nama-kosong.png)
 
-![Tampilan jendela dikecilkan](screenshots/tp12-shrunk.png)
+**2. Error Nama Duplikat**
 
-**C. Tampilan Jendela Dilebarkan**
+![Error Nama Duplikat](screenshots/tp14error-nama-duplikat.png)
 
-![Tampilan jendela dilebarkan](screenshots/tp12-widened.png)
+**3. Berhasil Menambahkan Karakter**
 
-### 3. Pengamatan Perubahan Ukuran Jendela
+![Berhasil Menambahkan Karakter](screenshots/tp14sukses-tambah-karakter.png)
 
-| Kondisi | Prediksi | Hasil Pengamatan |
-|---|---|---|
-| Ukuran awal | Semua komponen tampil sesuai susunan layout | Komponen tampil dengan rapi |
-| Jendela dilebarkan | Area daftar karakter menyesuaikan ruang yang tersedia | Daftar karakter melebar dan komponen tetap tersusun |
-| Jendela dikecilkan | Area daftar karakter menjadi terbatas dan scrollbar digunakan | Scrollbar muncul sehingga daftar karakter tetap dapat diakses |
+### C. Tabel Pengujian
 
-### 4. Struktur Panel Bersarang
+| No. | Kasus Pengujian | Hasil yang Diharapkan | Hasil Aktual | Status |
+|---|---|---|---|---|
+| 1 | Nama kosong | Nama wajib diisi | Pesan error muncul | Berhasil |
+| 2 | Nama duplikat (Arjuna) | Nama sudah dipakai | Pesan error muncul | Berhasil |
+| 3 | Nama kurang dari 3 karakter (Al) | Nama harus 3-20 karakter | Pesan error muncul | Berhasil |
+| 4 | Nama mengandung angka (Rachel123) | Nama hanya huruf dan spasi | Pesan error muncul | Berhasil |
+| 5 | Nama lebih dari 20 karakter | Nama harus 3-20 karakter | Pesan error muncul | Berhasil |
+| 6 | MAGE level 61 | Ditolak karena melebihi batas level | Pesan error muncul | Berhasil |
+| 7 | MAGE level 60 | Karakter berhasil disimpan | Karakter berhasil ditambahkan | Berhasil |
+| 8 | WARRIOR level 99 | Karakter berhasil disimpan | Karakter berhasil ditambahkan | Berhasil |
 
-Aplikasi menggunakan `BorderLayout` sebagai layout utama pada `MainWindow`. Bagian NORTH berisi panel pembungkus yang menggunakan `BoxLayout` untuk menyusun header dan panel statistik secara vertikal. Bagian CENTER berisi `JScrollPane` yang menampung panel daftar karakter, sedangkan bagian EAST berisi panel legenda dengan `BoxLayout` Y_AXIS. Bagian SOUTH digunakan sebagai status bar yang menampilkan jumlah karakter di sebelah kiri dan versi aplikasi di sebelah kanan.
+**Catatan Pengujian:**
 
-### 5. Alasan Pemilihan Layout Panel Tambahan
+Seluruh delapan kasus pengujian menghasilkan hasil sesuai dengan yang diharapkan. Tidak ditemukan perbedaan antara hasil aktual dan hasil yang diharapkan sehingga tidak diperlukan tindakan perbaikan tambahan berdasarkan pengujian tersebut.
 
-Panel statistik menggunakan `GridLayout(2, 2)` karena terdapat empat jenis role karakter, yaitu WARRIOR, MAGE, ARCHER, dan HEALER. Dengan GridLayout, setiap informasi statistik memiliki ukuran sel yang sama sehingga tampil lebih teratur dan mudah dibaca.
+### D. Aturan Validasi Tambahan
 
-Layout yang tidak dipilih adalah `FlowLayout`. Meskipun FlowLayout dapat menyusun komponen secara horizontal, susunannya dapat berpindah baris mengikuti lebar ruang yang tersedia. Oleh karena itu, GridLayout lebih sesuai untuk menampilkan empat informasi statistik dalam susunan dua baris dan dua kolom.
+Dua aturan validasi tambahan yang digunakan:
 
-### 6. Analisis Layout dan MVC
+1. **Nama hanya boleh mengandung huruf dan spasi (View).** Aturan ini diterapkan melalui method `validateName()` untuk mencegah nama yang mengandung angka atau simbol.
+2. **Mana tidak boleh bernilai negatif (Model).** Aturan ini diterapkan pada method `setMana()` menggunakan `IllegalArgumentException` agar nilai mana tetap valid.
 
-Dokumen analisis lengkap mengenai Layout Manager dan Model-View-Controller (MVC) dapat dibaca melalui Google Docs berikut:
+### E. Kompromi Sementara
 
-**Link Dokumen Analisis:**
-[Analisis Layout Manager dan MVC — Character Manager v0.5](https://1drv.ms/w/c/8cf06abcf94f4402/IQDfB94ljsVwTLhj_W_wiMKAAWwX6xQFQughzRvGg4z2CQU?e=0dkfxN)
+Pada tahap pengembangan ini, `ActionListener` masih digunakan secara langsung untuk menangani aksi tombol Simpan dan input Enter pada kolom nama. Selain itu, View masih memanggil `manager.addCharacter()` secara langsung untuk menambahkan karakter yang telah lolos validasi. Kedua hal tersebut merupakan kompromi sementara agar proses input dapat berjalan dengan sederhana. Pada pengembangan selanjutnya, pemisahan tanggung jawab dapat diperbaiki melalui penerapan Controller sesuai konsep MVC.
 
-### 7. Identitas Mahasiswa
+### F. Analisis TP14 — Bagian D
+
+Dokumen analisis: [TP14 — Input & Validation](https://1drv.ms/w/c/8cf06abcf94f4402/IQBQv2ZtPsJNS7n0I8FbtAU3AZE-RGyGXWCjhg0ceRSg1Zw?e=TQNTck)
+
+### Identitas Mahasiswa
 - Nama: Rachel Clarita Oktaviana Br Silaban
 - NIM: 253303621203
 - Kelas: Sistem Informasi 3 Pagi A
-- Tugas: TP12 — Layout Manager dan Responsive GUI
+- Tugas: TP14 — Input & Validation
