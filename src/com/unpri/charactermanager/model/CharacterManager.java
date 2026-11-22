@@ -79,8 +79,16 @@ public class CharacterManager {
         return new ArrayList<>(characterList);        // defensive copy — lihat Halaman 7 untuk eksperimen
     }
 
-    
-    // Menghitung rata-rata level semua karakter
+    /** Mengembalikan true jika sudah ada karakter bernama sama (tanpa membedakan huruf besar/kecil). */
+    public boolean isNameTaken(String name) {
+        for (Character c : getAllCharacters()) {            // memakai method yang sudah ada
+            if (c.getName().equalsIgnoreCase(name)) {       // "arjuna" dianggap sama dengan "Arjuna"
+                return true;
+            }
+        }
+        return false;
+    }
+        
     public double getAverageLevel() {
         if (characterList.isEmpty()) {
             return 0.0;

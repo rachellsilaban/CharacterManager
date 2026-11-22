@@ -11,14 +11,22 @@ public class Character {
     private int attackPower;
     private int mana; // atribut baru untuk Mini-Challenge
 
-    // ===== CONSTRUCTOR 1: untuk membuat karakter BARU =====
-    // Dipakai saat user membuat karakter dari form (belum punya id dari database)
     public Character(String name, CharacterType type, int level) {
-        this.name = name;              // "this" merujuk ke atribut milik object ini
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Nama tidak boleh kosong");
+        }
+
+        if (type == null) {
+            throw new IllegalArgumentException("Role wajib dipilih");
+        }
+
+        if (level < 1 || level > 99) {
+            throw new IllegalArgumentException("Level harus 1-99");
+        }
+
+        this.name = name;
         this.type = type;
         this.level = level;
-        this.hitPoints = calculateBaseHP();      // HP dihitung otomatis dari level
-        this.attackPower = calculateBaseAttack(); // Attack dihitung otomatis dari level
     }
 
     // ===== CONSTRUCTOR 2: untuk MEMUAT karakter dari database =====
